@@ -1,0 +1,101 @@
+# DDL - Create
+create database store;
+create table countries(
+    code int primary key ,
+    name varchar(20),
+    continent_name varchar(20)  
+);
+create table users(
+    id int primary key,
+    full_name varchar(20),
+    email varchar(20),
+    gender char(1) 
+    date_of_birth varchar(15),
+    created_at datetime,
+    country_code int,
+    foreign key (country_code) references countries(code)
+    );
+create table orders(
+    id int primary key,
+    users_id int,
+    status varchar(6),
+    created_at datetime,
+    foreign key (user_id) references users(id)
+    );
+
+create table products(
+    id int primary key,
+    name varchar(10),
+    price int,
+    status varchar(10),
+    created_at datetime,
+    foreign key (id) references orders(id)
+);
+
+create table order_products(
+    order_id int primary key,
+    product_id int primary key,
+    quantity int,
+    foreign key (order_id) references orders(id)
+    foreign key (product_id) references products(id)
+);
+
+# DDL - Alter  
+ALTER TABLE countries   
+ADD CONSTRAINT UC_countries UNIQUE (name); 
+
+alter table countries
+MODIFY continent_name NOT NULL;
+
+ 
+ALTER TABLE users   
+ADD CONSTRAINT UC_users UNIQUE (email); 
+
+
+ALTER TABLE users
+ADD CONSTRAINT check_gender
+CHECK (Gender IN ('M', 'F'));
+
+ALTER TABLE orders
+ADD CONSTRAINT check_status
+CHECK (status IN ('start', 'finish'));
+
+ALTER TABLE order_products
+ADD CONSTRAINT df_quantity
+DEFAULT '0' FOR quantity;
+
+ALTER TABLE products
+ADD CONSTRAINT df_price
+DEFAULT '0' FOR price;
+
+alter table products
+MODIFY name NOT NULL;
+
+ALTER TABLE products
+ADD CONSTRAINT check_status
+CHECK (status IN ('valid', 'expired'));
+
+# DML -insert
+insert into countries values ('123','Saudi','Asia');
+insert into users values ('1','mahmmod yazen','moh@.com','M','1992-12-26','1992-12-26 23:40:50','1234');
+insert into orders values ('2','2','start','3:00PM');
+insert into products values ('5','zainab','20','start','1992-12-26 23:40:50');
+insert into order_products values ('50001','pen','7');
+
+
+# DML - Update
+update countries set name='kuwait' where code='123';
+
+# DML - Delete
+delete from products where name='zainab';
+
+
+
+
+
+
+
+
+
+
+
